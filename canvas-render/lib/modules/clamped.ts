@@ -1,6 +1,10 @@
 export type Clamped = number & { __brand: 'Clamped number' };
 
 export const clamp = (decimal: number): Clamped => {
+    if (Number.isInteger(decimal)) {
+        return decimal as Clamped;
+    }
+
     return Math.floor(decimal) as Clamped;
 };
 

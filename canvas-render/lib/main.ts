@@ -1,4 +1,5 @@
 import { CANVAS_CONFIG, CANVAS_ID } from './constants';
+import { Clamped } from './modules/clamped';
 import * as vp from './modules/viewport';
 
 const createCanvas = (): HTMLCanvasElement => {
@@ -14,12 +15,19 @@ const createCanvas = (): HTMLCanvasElement => {
 };
 
 const render = (canvas: HTMLCanvasElement) => {
-    const viewport = {
-        width: 500,
-        height: 500,
+    const viewport: vp.Viewport = {
+        width: 600 as Clamped,
+        height: 600 as Clamped,
+        x: 100 as Clamped,
+        y: 100 as Clamped,
         entities: [],
     };
-    vp.tile(viewport, 5, 5);
+    vp.tile(viewport, {
+        countX: 8 as Clamped,
+        countY: 8 as Clamped,
+        colors: ['white', 'black'],
+        stagger: true,
+    });
 
     const viewports: vp.Viewport[] = [];
     viewports.push(viewport);
@@ -74,6 +82,7 @@ export const detach = (id: string): boolean => {
 
         return false;
     }
+
     elem.remove();
 
     return true;

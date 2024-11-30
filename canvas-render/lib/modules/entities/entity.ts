@@ -1,4 +1,4 @@
-import { Clamped } from '../../types';
+import { Clamped } from '../clamped';
 
 export type Draw = (canvas: HTMLCanvasElement, entity: any) => void;
 

@@ -5,4 +5,5 @@ export const CANVAS_CONFIG = Object.freeze({
     /** CSS color */
     backgroundColor: 'green',
     viewports: [{ x: 400, y: 400, entities: [] }],
+    font: '48px serif',
 });
