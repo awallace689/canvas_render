@@ -3,18 +3,17 @@
     "private": true,
     "version": "0.1.0",
     "type": "module",
-    "main": "dist/canvas-render.umd.cjs",
-    "module": "dist/canvas-render.js",
-    "types": "dist/lib/main.d.ts",
+    "main": "dist/index",
+    "module": "todo",
+    "types": "dist/index",
     "files": [
         "dist"
     ],
     "scripts": {
         "dev": "vite",
-        "build": "tsc && vite build",
+        "build": "rm -rf ./dist && tsc",
         "preview": "vite preview",
-        "test": "vitest",
-        "pack": "rm ./*.tgz && npm pack"
+        "test": "vitest"
     },
     "devDependencies": {
         "@types/node": "^22.9.0",

@@ -1,6 +1,11 @@
-import { CANVAS_CONFIG, CANVAS_ID } from './constants';
+import { CANVAS_CONFIG, CANVAS_ID, COLORS } from './constants';
 import { Clamped } from './modules/clamped';
 import * as vp from './modules/viewport';
+import { tile } from './modules/render/utils/viewport';
+import { IRText } from './modules/entities/rText';
+import { fitChar } from './modules/render/utils/entities/tile';
+import { assertChar } from './types';
+import { Payload } from './modules/payload';
 
 const createCanvas = (): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');
@@ -14,7 +19,7 @@ const createCanvas = (): HTMLCanvasElement => {
     return canvas;
 };
 
-const render = (canvas: HTMLCanvasElement) => {
+const buildPayload = (): Payload => {
     const viewport: vp.Viewport = {
         width: 600 as Clamped,
         height: 600 as Clamped,
@@ -22,18 +27,26 @@ const render = (canvas: HTMLCanvasElement) => {
         y: 100 as Clamped,
         entities: [],
     };
-    vp.tile(viewport, {
+    const tiles = tile(viewport, {
         countX: 8 as Clamped,
         countY: 8 as Clamped,
-        colors: ['white', 'black'],
+        colors: [COLORS.white, COLORS.black],
         stagger: true,
     });
+
+    const chars: IRText[] = tiles.map((t) => fitChar(assertChar('P'), t));
+
+    viewport.entities.push(...tiles, ...chars);
 
     const viewports: vp.Viewport[] = [];
     viewports.push(viewport);
 
+    return { viewports: [viewport], state: {} };
+};
+
+const render = (payload: Payload, canvas: HTMLCanvasElement) => {
     clear(canvas);
-    for (const viewport of viewports) {
+    for (const viewport of payload.viewports) {
         vp.render(viewport, canvas);
     }
 };
@@ -68,7 +81,7 @@ export const attach = (id: string): string => {
         throw new Error(`Failed to attach element with id: ${id}`);
     }
 
-    render(canvas);
+    render(buildPayload(), canvas);
 
     return canvas.id;
 };

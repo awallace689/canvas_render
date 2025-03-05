@@ -1,1 +1,2 @@
-export * from './lib/main.ts';
+export * from './lib/main';
+export * from './lib/types';
