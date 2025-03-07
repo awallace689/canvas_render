@@ -1,12 +1,12 @@
 export const CANVAS_ID = '__canvas_render__canvas';
 
-export const COLORS = {
+export const COLORS = Object.freeze({
     brown: '#964B00',
     white: 'white',
     black: 'black',
     red: 'red',
     green: 'green',
-};
+});
 
 export const CANVAS_CONFIG = Object.freeze({
     width: 800,

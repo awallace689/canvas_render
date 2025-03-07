@@ -4,7 +4,7 @@ import * as vp from './modules/viewport';
 import { tile } from './modules/render/utils/viewport';
 import { IRText } from './modules/entities/rText';
 import { fitChar } from './modules/render/utils/entities/tile';
-import { assertChar } from './types';
+import { createCharColor } from './types';
 import { Frame } from './modules/frame';
 
 const createCanvas = (): HTMLCanvasElement => {
@@ -28,13 +28,15 @@ const buildFrame = (): Frame => {
         entities: [],
     };
     const tiles = tile(viewport, {
-        countX: 17 as Clamped,
-        countY: 17 as Clamped,
+        countX: 8 as Clamped,
+        countY: 8 as Clamped,
         colors: [COLORS.white, COLORS.black],
         stagger: true,
     });
 
-    const chars: IRText[] = tiles.map((t) => fitChar(assertChar('P'), t));
+    const chars: IRText[] = tiles.map((t) =>
+        fitChar(createCharColor('P', COLORS.brown), t)
+    );
 
     viewport.entities.push(...tiles, ...chars);
 
