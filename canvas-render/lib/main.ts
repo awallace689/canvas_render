@@ -5,7 +5,7 @@ import { tile } from './modules/render/utils/viewport';
 import { IRText } from './modules/entities/rText';
 import { fitChar } from './modules/render/utils/entities/tile';
 import { assertChar } from './types';
-import { Payload } from './modules/payload';
+import { Frame } from './modules/frame';
 
 const createCanvas = (): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');
@@ -19,7 +19,7 @@ const createCanvas = (): HTMLCanvasElement => {
     return canvas;
 };
 
-const buildPayload = (): Payload => {
+const buildFrame = (): Frame => {
     const viewport: vp.Viewport = {
         width: 600 as Clamped,
         height: 600 as Clamped,
@@ -28,8 +28,8 @@ const buildPayload = (): Payload => {
         entities: [],
     };
     const tiles = tile(viewport, {
-        countX: 8 as Clamped,
-        countY: 8 as Clamped,
+        countX: 17 as Clamped,
+        countY: 17 as Clamped,
         colors: [COLORS.white, COLORS.black],
         stagger: true,
     });
@@ -41,10 +41,10 @@ const buildPayload = (): Payload => {
     const viewports: vp.Viewport[] = [];
     viewports.push(viewport);
 
-    return { viewports: [viewport], state: {} };
+    return { viewports: [viewport] };
 };
 
-const render = (payload: Payload, canvas: HTMLCanvasElement) => {
+const render = (payload: Frame, canvas: HTMLCanvasElement) => {
     clear(canvas);
     for (const viewport of payload.viewports) {
         vp.render(viewport, canvas);
@@ -81,7 +81,10 @@ export const attach = (id: string): string => {
         throw new Error(`Failed to attach element with id: ${id}`);
     }
 
-    render(buildPayload(), canvas);
+    const frame = buildFrame();
+    console.log(frame);
+
+    render(frame, canvas);
 
     return canvas.id;
 };

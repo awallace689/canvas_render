@@ -1,5 +1,5 @@
-import type { Clamped } from '../../modules/clamped';
 import { Color } from '../../types';
+import { Clamped } from '../clamped';
 import { Draw, Entity } from './entity';
 
 interface ITile extends Entity {
