@@ -1,4 +1,4 @@
-import { CANVAS_CONFIG, COLORS } from '../../../../constants';
+import { CANVAS_CONFIG } from '../../../../constants';
 import { midpoint } from '../../../../math';
 import { CharColor } from '../../../../types';
 import * as te from '../../../entities/rText';

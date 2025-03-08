@@ -1,3 +1,4 @@
+import { Color } from '../../../types';
 import { clampDown, clampUp, Clamped } from '../../clamped';
 import * as ti from '../../entities/tile';
 import { Viewport } from '../../viewport';
@@ -7,7 +8,7 @@ export const tile = (
     options: {
         countX: Clamped;
         countY: Clamped;
-        colors: [string, string];
+        colors: [Color, Color];
         stagger?: boolean;
     }
 ): ti.Tile[] => {

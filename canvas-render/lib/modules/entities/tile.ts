@@ -1,4 +1,4 @@
-import { Color } from '../../types';
+import { HasColor } from '../../types';
 import { Clamped } from '../clamped';
 import { Draw, Entity } from './entity';
 
@@ -8,7 +8,7 @@ interface ITile extends Entity {
     draw: Draw;
 }
 
-export type Tile = ITile & Color;
+export type Tile = ITile & HasColor;
 
 export const draw = (canvas: HTMLCanvasElement, tile: Tile): void => {
     const ctx = canvas.getContext('2d')!;
