@@ -13,9 +13,9 @@ export const createCharColor = (
     color: Color,
     assert = true
 ): CharColor => {
-    if (assert && str.length === 1) {
-        return { char: str as Char, color: color };
-    } else {
+    if (assert && str.length !== 1) {
         throw new TypeAssertError('Char', str);
     }
+
+    return { char: str as Char, color: color };
 };

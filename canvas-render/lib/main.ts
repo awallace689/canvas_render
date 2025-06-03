@@ -2,7 +2,7 @@ import { CANVAS_CONFIG, CANVAS_ID, COLORS } from './constants';
 import { Clamped } from './modules/clamped';
 import * as vp from './modules/viewport';
 import { tile } from './modules/render/utils/viewport';
-import { IRText } from './modules/entities/rText';
+import { RText } from './modules/entities/rText';
 import { fitChar } from './modules/render/utils/entities/tile';
 import { createCharColor } from './types';
 import { Frame } from './modules/frame';
@@ -26,6 +26,7 @@ const buildFrame = (): Frame => {
         x: 100 as Clamped,
         y: 100 as Clamped,
         entities: [],
+        description: 'Frame',
     };
     const tiles = tile(viewport, {
         countX: 8 as Clamped,
@@ -34,8 +35,8 @@ const buildFrame = (): Frame => {
         stagger: true,
     });
 
-    const chars: IRText[] = tiles.map((t) =>
-        fitChar(createCharColor('P', COLORS.brown), t)
+    const chars: RText[] = tiles.map((t) =>
+        fitChar(createCharColor('P', COLORS.brown, true), t)
     );
 
     viewport.entities.push(...tiles, ...chars);

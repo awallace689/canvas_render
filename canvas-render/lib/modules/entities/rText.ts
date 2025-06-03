@@ -1,14 +1,13 @@
 import { HasColor } from '../../types';
-import { Draw, Entity } from './entity';
+import { Entity } from './entity';
 
-export interface IRText extends Entity {
+interface IRText {
     fontSize: number;
     font: string;
     text: string;
-    draw: Draw;
 }
 
-export type RText = IRText & HasColor;
+export type RText = Entity & IRText & HasColor;
 
 export const draw = (canvas: HTMLCanvasElement, text: RText): void => {
     const ctx = canvas.getContext('2d')!;

@@ -1,22 +1,26 @@
 import { CANVAS_CONFIG } from '../../../../constants';
 import { midpoint } from '../../../../math';
 import { CharColor } from '../../../../types';
-import * as te from '../../../entities/rText';
-import { Tile } from '../../../entities/tile';
+import { Entity, HasSize } from '../../../entities/entity';
+import { RText, draw } from '../../../entities/rText';
 
-export const fitChar = (char: CharColor, tile: Tile): te.RText => {
-    const fontSize = Math.min(tile.width, tile.height);
+export const fitChar = (
+    char: CharColor,
+    sizedEntity: Entity & HasSize
+): RText => {
+    const fontSize = Math.min(sizedEntity.width, sizedEntity.height);
 
-    const text: te.RText = {
+    const text: RText = {
         fontSize,
         font: CANVAS_CONFIG.font,
-        draw: te.draw,
+        draw,
         text: char.char,
-        pos: midpoint(tile.pos, {
-            x: tile.pos.x + tile.width,
-            y: tile.pos.y + tile.height,
+        pos: midpoint(sizedEntity.pos, {
+            x: sizedEntity.pos.x + sizedEntity.width,
+            y: sizedEntity.pos.y + sizedEntity.height,
         }),
         color: char.color,
+        description: 'fitChar',
     };
 
     return text;

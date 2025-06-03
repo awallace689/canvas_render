@@ -1,6 +1,6 @@
 import { Color } from '../../../types';
 import { clampDown, clampUp, Clamped } from '../../clamped';
-import * as ti from '../../entities/tile';
+import { Tile, draw } from '../../entities/tile';
 import { Viewport } from '../../viewport';
 
 export const tile = (
@@ -11,31 +11,37 @@ export const tile = (
         colors: [Color, Color];
         stagger?: boolean;
     }
-): ti.Tile[] => {
+): Tile[] => {
     const { countX, countY, colors, stagger } = options;
 
     const width = viewport.width / countX;
     const height = viewport.height / countY;
 
     let color = colors[0];
-    let x = viewport.x as number,
-        y = viewport.y as number;
+    let x_pos = viewport.x as number,
+        y_pos = viewport.y as number;
 
-    const tiles: ti.Tile[] = [];
-    while (y + height <= viewport.y + viewport.height) {
-        while (x + width <= viewport.x + viewport.width) {
-            const tile: ti.Tile = {
-                pos: { x: clampDown(x), y: clampDown(y) },
+    let i = 0,
+        j = 0;
+
+    const tiles: Tile[] = [];
+
+    while (y_pos + height <= viewport.y + viewport.height) {
+        while (x_pos + width <= viewport.x + viewport.width) {
+            const tile: Tile = {
+                pos: { x: clampDown(x_pos), y: clampDown(y_pos) },
                 width: clampUp(width),
                 height: clampUp(height),
-                draw: ti.draw,
+                draw: draw,
                 color,
+                description: 'Tile',
             };
 
             tiles.push(tile);
 
             color = color === colors[0] ? colors[1] : colors[0];
-            x = x + width;
+            x_pos = x_pos + width;
+            j += 1;
         }
 
         if (stagger && countX % 2 == 0) {
@@ -46,8 +52,9 @@ export const tile = (
             color = color === colors[0] ? colors[1] : colors[0];
         }
 
-        y = y + height;
-        x = viewport.x;
+        y_pos = y_pos + height;
+        x_pos = viewport.x;
+        i += 1;
     }
 
     return tiles;

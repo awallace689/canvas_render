@@ -7,6 +7,7 @@ export interface Viewport {
     x: Clamped;
     y: Clamped;
     entities: Entity[];
+    description: string;
 }
 
 export const render = (viewport: Viewport, canvas: HTMLCanvasElement) => {
@@ -23,7 +24,8 @@ export const create = (
     height: Clamped,
     x: Clamped,
     y: Clamped,
-    entities: Entity[]
+    entities: Entity[],
+    description: string
 ): Viewport => {
     return {
         width,
@@ -31,6 +33,7 @@ export const create = (
         x,
         y,
         entities,
+        description,
     };
 };
 
