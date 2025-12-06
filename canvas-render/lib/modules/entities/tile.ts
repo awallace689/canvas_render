@@ -1,7 +1,7 @@
 import { HasColor } from '../../types';
-import { Entity, HasSize } from './entity';
+import { Drawable, HasSize } from './entity';
 
-export type Tile = Entity & HasSize & HasColor;
+export type Tile = Drawable & HasSize & HasColor;
 
 export const draw = (canvas: HTMLCanvasElement, tile: Tile): void => {
     const ctx = canvas.getContext('2d')!;

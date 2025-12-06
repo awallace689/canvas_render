@@ -1,5 +1,5 @@
 import { CANVAS_CONFIG, CANVAS_ID, COLORS } from './constants';
-import { Clamped } from './modules/clamped';
+import { clampDown } from './modules/clamped';
 import * as vp from './modules/viewport';
 import { tile } from './modules/render/utils/viewport';
 import { RText } from './modules/entities/rText';
@@ -21,16 +21,16 @@ const createCanvas = (): HTMLCanvasElement => {
 
 const buildFrame = (): Frame => {
     const viewport: vp.Viewport = {
-        width: 600 as Clamped,
-        height: 600 as Clamped,
-        x: 100 as Clamped,
-        y: 100 as Clamped,
+        width: clampDown(600),
+        height: clampDown(600),
+        x: clampDown(100),
+        y: clampDown(100),
         entities: [],
         description: 'Frame',
     };
     const tiles = tile(viewport, {
-        countX: 8 as Clamped,
-        countY: 8 as Clamped,
+        countX: clampDown(8),
+        countY: clampDown(8),
         colors: [COLORS.white, COLORS.black],
         stagger: true,
     });
@@ -55,7 +55,10 @@ const render = (payload: Frame, canvas: HTMLCanvasElement) => {
 };
 
 const clear = (canvas: HTMLCanvasElement) => {
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        throw new Error('Could not get 2D context from canvas');
+    }
 
     ctx.fillStyle = CANVAS_CONFIG.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -85,7 +88,6 @@ export const attach = (id: string): string => {
     }
 
     const frame = buildFrame();
-    console.log(frame);
 
     render(frame, canvas);
 

@@ -18,18 +18,14 @@ export const tile = (
     const height = viewport.height / countY;
 
     let color = colors[0];
-    let x_pos = viewport.x as number,
-        y_pos = viewport.y as number;
-
-    let i = 0,
-        j = 0;
+    let xPos = viewport.x as number,
+        yPos = viewport.y as number;
 
     const tiles: Tile[] = [];
-
-    while (y_pos + height <= viewport.y + viewport.height) {
-        while (x_pos + width <= viewport.x + viewport.width) {
+    while (yPos + height <= viewport.y + viewport.height) {
+        while (xPos + width <= viewport.x + viewport.width) {
             const tile: Tile = {
-                pos: { x: clampDown(x_pos), y: clampDown(y_pos) },
+                pos: { x: clampDown(xPos), y: clampDown(yPos) },
                 width: clampUp(width),
                 height: clampUp(height),
                 draw: draw,
@@ -40,22 +36,19 @@ export const tile = (
             tiles.push(tile);
 
             color = color === colors[0] ? colors[1] : colors[0];
-            x_pos = x_pos + width;
-            j += 1;
+            xPos = xPos + width;
         }
 
-        if (stagger && countX % 2 == 0) {
-            color = color === colors[0] ? colors[1] : colors[0];
+        const isEven = countX % 2 == 0;
+        if ((stagger && isEven) || (!stagger && !isEven)) {
+            color = alternateColor(color, colors);
         }
 
-        if (!stagger && countX % 2 == 1) {
-            color = color === colors[0] ? colors[1] : colors[0];
-        }
-
-        y_pos = y_pos + height;
-        x_pos = viewport.x;
-        i += 1;
+        yPos = yPos + height;
+        xPos = viewport.x;
     }
 
     return tiles;
 };
+const alternateColor = (color: string, colors: [Color, Color]): Color =>
+    color === colors[0] ? colors[1] : colors[0];

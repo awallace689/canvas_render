@@ -1,4 +1,4 @@
-export type Draw = (canvas: HTMLCanvasElement, entity: any) => void;
+export type Draw<T> = (canvas: HTMLCanvasElement, entity: T) => void;
 
 export interface HasSize {
     width: number;
@@ -8,5 +8,5 @@ export interface HasSize {
 export interface Entity {
     pos: { x: number; y: number };
     description: string;
-    draw: Draw;
+    draw: Draw<T>;
 }

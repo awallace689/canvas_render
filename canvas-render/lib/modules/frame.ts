@@ -9,5 +9,5 @@ export const pushViewport = (vp: Viewport, frame: Frame): void => {
 };
 
 export const popViewport = (index: number, frame: Frame): void => {
-    frame.viewports = frame.viewports.splice(index, 1);
+    frame.viewports.splice(index, 1);
 };

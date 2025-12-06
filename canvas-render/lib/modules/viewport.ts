@@ -1,12 +1,13 @@
+import { COLORS } from '../constants';
 import { Clamped } from './clamped';
-import { Entity } from './entities/entity';
+import { Drawable } from './entities/entity';
 
 export interface Viewport {
     width: Clamped;
     height: Clamped;
     x: Clamped;
     y: Clamped;
-    entities: Entity[];
+    entities: Drawable[];
     description: string;
 }
 
@@ -24,7 +25,7 @@ export const create = (
     height: Clamped,
     x: Clamped,
     y: Clamped,
-    entities: Entity[],
+    entities: Drawable<any>[],
     description: string
 ): Viewport => {
     return {
@@ -43,6 +44,6 @@ const clear = (viewport: Viewport, canvas: HTMLCanvasElement) => {
     const x = viewport.x,
         y = viewport.y;
 
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = COLORS.red;
     ctx.fillRect(x, y, viewport.width, viewport.height);
 };

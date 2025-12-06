@@ -16,7 +16,7 @@ export const clampUp = (decimal: number): Clamped => {
     return Math.ceil(decimal) as Clamped;
 };
 
-export const clampDown2 = (pos: {
+export const clampDown2D = (pos: {
     x: number;
     y: number;
 }): { x: Clamped; y: Clamped } => {

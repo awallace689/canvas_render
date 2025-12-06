@@ -1,12 +1,12 @@
 import { CANVAS_CONFIG } from '../../../../constants';
 import { midpoint } from '../../../../math';
 import { CharColor } from '../../../../types';
-import { Entity, HasSize } from '../../../entities/entity';
+import { Drawable, HasSize } from '../../../entities/entity';
 import { RText, draw } from '../../../entities/rText';
 
 export const fitChar = (
     char: CharColor,
-    sizedEntity: Entity & HasSize
+    sizedEntity: Drawable & HasSize
 ): RText => {
     const fontSize = Math.min(sizedEntity.width, sizedEntity.height);
 
