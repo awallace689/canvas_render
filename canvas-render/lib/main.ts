@@ -1,6 +1,6 @@
 import { CANVAS_CONFIG, CANVAS_ID, COLORS } from './constants';
 import { clampDown } from './modules/clamped';
-import * as vp from './modules/viewport';
+import { Viewport, render } from './modules/viewport';
 import { tile } from './modules/render/utils/viewport';
 import { RText } from './modules/entities/rText';
 import { fitChar } from './modules/render/utils/entities/tile';
@@ -20,7 +20,7 @@ const createCanvas = (): HTMLCanvasElement => {
 };
 
 const buildFrame = (): Frame => {
-    const viewport: vp.Viewport = {
+    const viewport: Viewport = {
         width: clampDown(600),
         height: clampDown(600),
         x: clampDown(100),
@@ -41,16 +41,16 @@ const buildFrame = (): Frame => {
 
     viewport.entities.push(...tiles, ...chars);
 
-    const viewports: vp.Viewport[] = [];
+    const viewports: Viewport[] = [];
     viewports.push(viewport);
 
     return { viewports: [viewport] };
 };
 
-const render = (payload: Frame, canvas: HTMLCanvasElement) => {
+const renderCanvas = (payload: Frame, canvas: HTMLCanvasElement) => {
     clear(canvas);
     for (const viewport of payload.viewports) {
-        vp.render(viewport, canvas);
+        render(viewport, canvas);
     }
 };
 
@@ -89,7 +89,7 @@ export const attach = (id: string): string => {
 
     const frame = buildFrame();
 
-    render(frame, canvas);
+    renderCanvas(frame, canvas);
 
     return canvas.id;
 };
