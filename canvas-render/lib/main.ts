@@ -5,7 +5,7 @@ import { tile } from './modules/render/utils/viewport';
 import { RText } from './modules/entities/rText';
 import { fitChar } from './modules/render/utils/entities/tile';
 import { createCharColor } from './types';
-import { Frame } from './modules/frame';
+import { createFrame, Frame } from './modules/frame';
 
 const createCanvas = (): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');
@@ -44,7 +44,7 @@ const buildFrame = (): Frame => {
     const viewports: Viewport[] = [];
     viewports.push(viewport);
 
-    return { viewports: [viewport] };
+    return createFrame(viewport);
 };
 
 const renderCanvas = (payload: Frame, canvas: HTMLCanvasElement) => {

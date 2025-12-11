@@ -1,10 +1,6 @@
 export type Clamped = number & { __brand: 'Clamped number' };
 
 export const clampDown = (decimal: number): Clamped => {
-    if (Number.isInteger(decimal)) {
-        return decimal as Clamped;
-    }
-
     return Math.floor(decimal) as Clamped;
 };
 
@@ -23,3 +19,6 @@ export const clampDown2D = (pos: {
     const { x, y } = pos;
     return { x: clampDown(x), y: clampDown(y) };
 };
+
+export const clampAdd = (...params: Clamped[]): Clamped =>
+    (params as number[]).reduce((x, y) => x + y, 0) as Clamped;

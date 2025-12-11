@@ -1,5 +1,5 @@
 import { Color } from '../../../types';
-import { clampDown, clampUp, Clamped } from '../../clamped';
+import { clampDown, clampUp, Clamped, clampAdd } from '../../clamped';
 import { Tile, draw } from '../../entities/tile';
 import { Viewport } from '../../viewport';
 
@@ -18,8 +18,8 @@ export const tile = (
     const height = viewport.height / countY;
 
     let color = colors[0];
-    let xPos = viewport.x as number,
-        yPos = viewport.y as number;
+    let xPos = viewport.x,
+        yPos = viewport.y;
 
     const tiles: Tile[] = [];
     while (yPos + height <= viewport.y + viewport.height) {
@@ -35,8 +35,8 @@ export const tile = (
 
             tiles.push(tile);
 
-            color = color === colors[0] ? colors[1] : colors[0];
-            xPos = xPos + width;
+            color = alternateColor(color, colors);
+            xPos = clampAdd(xPos, clampDown(width));
         }
 
         const isEven = countX % 2 == 0;
