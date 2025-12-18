@@ -1,6 +1,6 @@
 import { Color } from '../../../types';
 import { clampDown, clampUp, Clamped, clampAdd } from '../../clamped';
-import { Tile, draw } from '../../entities/tile';
+import { Tile, createTile } from '../../entities/tile';
 import { Viewport } from '../../viewport';
 
 export const tile = (
@@ -24,14 +24,11 @@ export const tile = (
     const tiles: Tile[] = [];
     while (yPos + height <= viewport.y + viewport.height) {
         while (xPos + width <= viewport.x + viewport.width) {
-            const tile: Tile = {
-                pos: { x: clampDown(xPos), y: clampDown(yPos) },
-                width: clampUp(width),
-                height: clampUp(height),
-                draw: draw,
-                color,
-                description: 'Tile',
-            };
+            const tile = createTile(
+                { x: clampDown(xPos), y: clampDown(yPos) },
+                { width: clampUp(width), height: clampUp(height) },
+                color
+            );
 
             tiles.push(tile);
 
@@ -44,7 +41,7 @@ export const tile = (
             color = alternateColor(color, colors);
         }
 
-        yPos = yPos + height;
+        yPos = clampAdd(yPos, clampDown(height));
         xPos = viewport.x;
     }
 

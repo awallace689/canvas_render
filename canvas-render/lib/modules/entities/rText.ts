@@ -1,23 +1,51 @@
-import { HasColor } from '../../types';
-import { Drawable } from './entity';
+import { Color } from '../../types';
+import { Entity, Draw } from './entity';
+import { Text } from '../abilities/text';
+import { Drawable, dispatchDraw } from '../abilities/drawable';
 
-interface IRText {
-    fontSize: number;
-    font: string;
-    text: string;
-}
+export type RText = Entity & {
+    abilities: {
+        text: Text;
+        color: Color;
+        drawable: Drawable;
+    };
+};
 
-export type RText = Drawable & IRText & HasColor;
+export const isRText = (entity: Entity): entity is RText => {
+    return entity.type === 'RText';
+};
 
-export const draw = (canvas: HTMLCanvasElement, text: RText): void => {
+export const drawRText: Draw<RText> = (
+    canvas: HTMLCanvasElement,
+    text: RText
+): void => {
     const ctx = canvas.getContext('2d')!;
 
     const x = text.pos.x,
         y = text.pos.y;
 
-    ctx.font = `${text.fontSize}px ${text.font}`;
+    const { fontSize, font, text: str } = text.abilities.text;
+    const color = text.abilities.color;
+
+    ctx.font = `${fontSize}px ${font}`;
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-    ctx.fillStyle = text.color;
-    ctx.fillText(text.text, x, y);
+    ctx.fillStyle = color;
+    ctx.fillText(str, x, y);
+};
+
+export const createRText = (
+    pos: { x: number; y: number },
+    text: Text,
+    color: Color
+): RText => {
+    return {
+        pos,
+        type: 'RText',
+        abilities: {
+            text,
+            color,
+            drawable: { draw: dispatchDraw },
+        },
+    };
 };

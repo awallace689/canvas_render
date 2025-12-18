@@ -1,23 +1,27 @@
 import { COLORS } from '../constants';
 import { Clamped } from './clamped';
-import { Drawable } from './entities/entity';
+import { isDrawable } from './abilities/drawable';
+import { Tile } from './entities/tile';
+import { RText } from './entities/rText';
+
+export type RenderableEntity = Tile | RText;
 
 export interface Viewport {
     width: Clamped;
     height: Clamped;
     x: Clamped;
     y: Clamped;
-    entities: Drawable[];
+    entities: RenderableEntity[];
     description: string;
 }
 
 export const render = (viewport: Viewport, canvas: HTMLCanvasElement) => {
     clear(viewport, canvas);
     for (const entity of viewport.entities) {
-        entity.draw(canvas, entity);
+        if (isDrawable(entity)) {
+            entity.abilities.drawable.draw(canvas, entity);
+        }
     }
-
-    return;
 };
 
 export const create = (
@@ -25,7 +29,7 @@ export const create = (
     height: Clamped,
     x: Clamped,
     y: Clamped,
-    entities: Drawable<any>[],
+    entities: RenderableEntity[],
     description: string
 ): Viewport => {
     return {

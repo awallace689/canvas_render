@@ -1,27 +1,27 @@
 import { CANVAS_CONFIG } from '../../../../constants';
 import { midpoint } from '../../../../math';
 import { CharColor } from '../../../../types';
-import { Drawable, HasSize } from '../../../entities/entity';
-import { RText, draw } from '../../../entities/rText';
+import { Entity } from '../../../entities/entity';
+import { Size } from '../../../abilities/size';
+import { RText, createRText } from '../../../entities/rText';
 
 export const fitChar = (
     char: CharColor,
-    sizedEntity: Drawable & HasSize
+    sizedEntity: Entity & { abilities: { size: Size } }
 ): RText => {
-    const fontSize = Math.min(sizedEntity.width, sizedEntity.height);
+    const { width, height } = sizedEntity.abilities.size;
+    const fontSize = Math.min(width, height);
 
-    const text: RText = {
-        fontSize,
-        font: CANVAS_CONFIG.font,
-        draw,
-        text: char.char,
-        pos: midpoint(sizedEntity.pos, {
-            x: sizedEntity.pos.x + sizedEntity.width,
-            y: sizedEntity.pos.y + sizedEntity.height,
+    return createRText(
+        midpoint(sizedEntity.pos, {
+            x: sizedEntity.pos.x + width,
+            y: sizedEntity.pos.y + height,
         }),
-        color: char.color,
-        description: 'fitChar',
-    };
-
-    return text;
+        {
+            fontSize,
+            font: CANVAS_CONFIG.font,
+            text: char.char,
+        },
+        char.color
+    );
 };

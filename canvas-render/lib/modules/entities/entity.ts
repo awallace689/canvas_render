@@ -1,12 +1,17 @@
-export type Draw<T> = (canvas: HTMLCanvasElement, entity: T) => void;
+import { Color } from '../../types';
+import { Text } from '../abilities/text';
+import { Drawable } from '../abilities/drawable';
+import { Size } from '../abilities/size';
 
-export interface HasSize {
-    width: number;
-    height: number;
-}
+export type Draw<T> = (canvas: HTMLCanvasElement, entity: T) => void;
 
 export interface Entity {
     pos: { x: number; y: number };
-    description: string;
-    draw: Draw<T>;
+    type: string;
+    abilities: Partial<{
+        size?: Size;
+        color?: Color;
+        text?: Text;
+        drawable?: Drawable;
+    }>;
 }
