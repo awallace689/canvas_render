@@ -2,7 +2,7 @@
 
 ## About
 
-Canvas game engine. 
+Canvas game engine.
 
 ## Usage
 

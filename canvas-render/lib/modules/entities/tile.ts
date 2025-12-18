@@ -9,7 +9,7 @@ export type Tile = Entity & {
         color: Color;
         drawable: Drawable;
     };
-}
+};
 
 export const isTile = (entity: Entity): entity is Tile => {
     return entity.type === 'Tile';

@@ -14,7 +14,10 @@ export const isDrawable = <T extends Entity>(
     return 'drawable' in entity.abilities;
 };
 
-export const dispatchDraw = (canvas: HTMLCanvasElement, entity: Entity): void => {
+export const dispatchDraw = (
+    canvas: HTMLCanvasElement,
+    entity: Entity
+): void => {
     if (isRText(entity)) {
         drawRText(canvas, entity);
     } else if (isTile(entity)) {
