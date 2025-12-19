@@ -1,10 +1,10 @@
 import { CANVAS_CONFIG } from '../../../../constants';
 import { midpoint } from '../../../../math';
 import { CharColor } from '../../../../types';
-import { Entity } from '../../../entities/entity';
-import { Box } from '../../../components/box';
-import { RText, createRText } from '../../../entities/rText';
 import { Clamped } from '../../../clamped';
+import { Box } from '../../../components/box';
+import { Entity } from '../../../entities/entity';
+import { RText, createRText } from '../../../entities/rText';
 
 export const fitChar = (
     char: CharColor,

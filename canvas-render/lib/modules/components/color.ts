@@ -1,5 +1,5 @@
-import type { Entity } from '../entities/entity';
 import type { Color } from '../../types';
+import type { Entity } from '../entities/entity';
 
 export const isColor = (
     entity: Entity

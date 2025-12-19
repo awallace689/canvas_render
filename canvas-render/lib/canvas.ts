@@ -1,6 +1,6 @@
 import { CANVAS_CONFIG, CANVAS_ID } from './constants';
-import { render } from './modules/viewport';
 import { Frame } from './modules/frame';
+import { render } from './modules/viewport';
 
 const createCanvas = (): HTMLCanvasElement => {
     const canvas = document.createElement('canvas');

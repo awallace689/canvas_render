@@ -1,7 +1,7 @@
 import { Color } from '../../types';
-import { Entity } from './entity';
 import { Box } from '../components/box';
 import { Drawable, dispatchDraw } from '../components/drawable';
+import { Entity } from './entity';
 
 export type Tile = Entity & {
     abilities: {

@@ -1,8 +1,8 @@
 import { COLORS } from '../constants';
 import { Clamped } from './clamped';
 import { isDrawable } from './components/drawable';
-import { Tile } from './entities/tile';
 import { RText } from './entities/rText';
+import { Tile } from './entities/tile';
 
 export type RenderableEntity = Tile | RText;
 

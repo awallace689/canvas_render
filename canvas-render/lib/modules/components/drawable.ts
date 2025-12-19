@@ -1,7 +1,7 @@
 import type { Entity } from '../entities/entity';
 import { drawRText } from '../entities/rText';
-import { drawTile } from '../entities/tile';
 import { isRText } from '../entities/rText';
+import { drawTile } from '../entities/tile';
 import { isTile } from '../entities/tile';
 
 export interface Drawable {

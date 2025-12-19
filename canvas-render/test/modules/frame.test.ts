@@ -1,11 +1,11 @@
-import { expect, describe, test } from 'vitest';
+import { clampDown } from '../../lib/modules/clamped';
 import {
     createFrame,
     pushViewport,
     popViewport,
 } from '../../lib/modules/frame';
 import { Viewport } from '../../lib/modules/viewport';
-import { clampDown } from '../../lib/modules/clamped';
+import { expect, describe, test } from 'vitest';
 
 const createMockViewport = (
     description: string = 'Mock Viewport'

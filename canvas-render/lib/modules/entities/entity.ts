@@ -1,7 +1,7 @@
 import { Color } from '../../types';
-import { Text } from '../components/text';
-import { Drawable } from '../components/drawable';
 import { Box } from '../components/box';
+import { Drawable } from '../components/drawable';
+import { Text } from '../components/text';
 
 export type Draw<T> = (canvas: HTMLCanvasElement, entity: T) => void;
 

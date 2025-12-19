@@ -1,5 +1,5 @@
-import { TypeAssertError } from './errors';
 import { COLORS } from './constants';
+import { TypeAssertError } from './errors';
 
 export type Color = (typeof COLORS)[keyof typeof COLORS];
 

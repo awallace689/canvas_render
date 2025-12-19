@@ -1,12 +1,12 @@
-import { COLORS } from '../../lib/constants';
-import { Viewport } from '../../lib/modules/viewport';
-import { clampDown } from '../../lib/modules/clamped';
-import { tile } from '../../lib/modules/render/utils/viewport';
-import { RText } from '../../lib/modules/entities/rText';
-import { fitChar } from '../../lib/modules/render/utils/entities/tile';
-import { createCharColor } from '../../lib/types';
-import { createFrame, Frame } from '../../lib/modules/frame';
 import { attach } from '../../lib/canvas.ts';
+import { COLORS } from '../../lib/constants';
+import { clampDown } from '../../lib/modules/clamped';
+import { RText } from '../../lib/modules/entities/rText';
+import { createFrame, Frame } from '../../lib/modules/frame';
+import { fitChar } from '../../lib/modules/render/utils/entities/tile';
+import { tile } from '../../lib/modules/render/utils/viewport';
+import { Viewport } from '../../lib/modules/viewport';
+import { createCharColor } from '../../lib/types';
 
 export const buildFrame = (): Frame => {
     const viewport: Viewport = {

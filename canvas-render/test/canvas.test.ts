@@ -1,6 +1,6 @@
-import { expect, describe, test, beforeEach, afterEach, vi } from 'vitest';
 import { attach } from '../lib/canvas.ts';
 import { CANVAS_ID } from '../lib/constants.ts';
+import { expect, describe, test, beforeEach, afterEach, vi } from 'vitest';
 
 const MOCK_CONTAINER_ID = 'mock-container-id';
 
