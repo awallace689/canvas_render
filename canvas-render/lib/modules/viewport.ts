@@ -1,6 +1,6 @@
 import { COLORS } from '../constants';
 import { Clamped } from './clamped';
-import { isDrawable } from './abilities/drawable';
+import { isDrawable } from './components/drawable';
 import { Tile } from './entities/tile';
 import { RText } from './entities/rText';
 

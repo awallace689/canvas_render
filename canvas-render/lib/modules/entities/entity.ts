@@ -1,7 +1,7 @@
 import { Color } from '../../types';
-import { Text } from '../abilities/text';
-import { Drawable } from '../abilities/drawable';
-import { Size } from '../abilities/size';
+import { Text } from '../components/text';
+import { Drawable } from '../components/drawable';
+import { Box } from '../components/box';
 
 export type Draw<T> = (canvas: HTMLCanvasElement, entity: T) => void;
 
@@ -9,7 +9,7 @@ export interface Entity {
     pos: { x: number; y: number };
     type: string;
     abilities: Partial<{
-        size?: Size;
+        box?: Box;
         color?: Color;
         text?: Text;
         drawable?: Drawable;

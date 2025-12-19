@@ -94,12 +94,12 @@
         </div>
         <script type="module">
             window.onload = async function () {
-                // Dynamically import the module after the page has fully loaded
-                const main = await import('./lib/main.ts');
-                if (main) {
-                    main.attach('container');
+                const path = './examples/tile/tile.ts';
+                const example = await import(path);
+                if (example) {
+                    example.run('container');
                 } else {
-                    console.error("can't find main");
+                    console.error(`File ${path} not found.`);
                 }
             };
         </script>

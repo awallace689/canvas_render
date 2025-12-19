@@ -1,7 +1,7 @@
 import { Color } from '../../types';
 import { Entity, Draw } from './entity';
-import { Text } from '../abilities/text';
-import { Drawable, dispatchDraw } from '../abilities/drawable';
+import { Text } from '../components/text';
+import { Drawable, dispatchDraw } from '../components/drawable';
 
 export type RText = Entity & {
     abilities: {

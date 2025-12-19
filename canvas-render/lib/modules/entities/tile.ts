@@ -1,11 +1,11 @@
 import { Color } from '../../types';
 import { Entity } from './entity';
-import { Size } from '../abilities/size';
-import { Drawable, dispatchDraw } from '../abilities/drawable';
+import { Box } from '../components/box';
+import { Drawable, dispatchDraw } from '../components/drawable';
 
 export type Tile = Entity & {
     abilities: {
-        size: Size;
+        box: Box;
         color: Color;
         drawable: Drawable;
     };
@@ -21,7 +21,7 @@ export const drawTile = (canvas: HTMLCanvasElement, tile: Tile): void => {
     const x = tile.pos.x,
         y = tile.pos.y;
 
-    const { width, height } = tile.abilities.size;
+    const { width, height } = tile.abilities.box;
     const color = tile.abilities.color;
 
     ctx.fillStyle = color;
@@ -30,14 +30,14 @@ export const drawTile = (canvas: HTMLCanvasElement, tile: Tile): void => {
 
 export const createTile = (
     pos: { x: number; y: number },
-    size: Size,
+    box: Box,
     color: Color
 ): Tile => {
     return {
         pos,
         type: 'Tile',
         abilities: {
-            size,
+            box,
             color,
             drawable: { draw: dispatchDraw },
         },

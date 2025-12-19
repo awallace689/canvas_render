@@ -1,2 +1,2 @@
-export * from './lib/main';
+export * from './lib/canvas';
 export * from './lib/types';
