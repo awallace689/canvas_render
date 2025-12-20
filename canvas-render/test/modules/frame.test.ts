@@ -1,9 +1,9 @@
-import { clampDown } from '../../lib/modules/clamped';
 import {
     createFrame,
     pushViewport,
     popViewport,
 } from '../../lib/modules/frame';
+import { clampDown } from '../../lib/modules/types/clamped';
 import { Viewport } from '../../lib/modules/viewport';
 import { expect, describe, test } from 'vitest';
 

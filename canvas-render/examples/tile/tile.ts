@@ -1,12 +1,12 @@
 import { attach } from '../../lib/canvas.ts';
 import { COLORS } from '../../lib/constants';
-import { clampDown } from '../../lib/modules/clamped';
-import { RText } from '../../lib/modules/entities/rText';
+import { clampDown } from '../../lib/modules/types/clamped';
+import { TextColor } from '../../lib/modules/entities/textColor';
 import { createFrame, Frame } from '../../lib/modules/frame';
 import { fitChar } from '../../lib/modules/render/utils/entities/tile';
 import { tile } from '../../lib/modules/render/utils/viewport';
 import { Viewport } from '../../lib/modules/viewport';
-import { createCharColor } from '../../lib/types';
+import { createCharColor } from '../../lib/modules/types/charColor';
 
 export const buildFrame = (): Frame => {
     const viewport: Viewport = {
@@ -24,7 +24,7 @@ export const buildFrame = (): Frame => {
         stagger: true,
     });
 
-    const chars: RText[] = tiles.map((tile) =>
+    const chars: TextColor[] = tiles.map((tile) =>
         fitChar(createCharColor('P', COLORS.brown), tile)
     );
 

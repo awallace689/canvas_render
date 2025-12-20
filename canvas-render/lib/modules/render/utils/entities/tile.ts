@@ -1,16 +1,16 @@
 import { CANVAS_CONFIG } from '../../../../constants';
 import { midpoint } from '../../../../math';
-import { CharColor } from '../../../../types';
-import { Clamped } from '../../../clamped';
+import type { CharColor } from '../../../types/charColor';
 import { Box } from '../../../components/box';
 import { Entity } from '../../../entities/entity';
-import { RText, createRText } from '../../../entities/rText';
+import { TextColor, createTextColor } from '../../../entities/textColor';
+import { Clamped } from '../../../types/clamped';
 
 export const fitChar = (
     char: CharColor,
     sizedEntity: Entity & { abilities: { box: Box } },
     offset?: { x: Clamped; y: Clamped }
-): RText => {
+): TextColor => {
     const { width, height } = sizedEntity.abilities.box;
     const fontSize = Math.min(width, height);
     const mid = midpoint(sizedEntity.pos, {
@@ -20,12 +20,12 @@ export const fitChar = (
 
     const pos = { x: mid.x + (offset?.x ?? 0), y: mid.y + (offset?.y ?? 0) };
 
-    return createRText(
+    return createTextColor(
         pos,
         {
             fontSize,
             font: CANVAS_CONFIG.font,
-            text: char.char,
+            content: char.char,
         },
         char.color
     );

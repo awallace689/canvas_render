@@ -1,5 +1,5 @@
 import { Color } from '../../../types';
-import { clampDown, clampUp, Clamped, clampAdd } from '../../clamped';
+import { clampDown, clampUp, Clamped, clampAdd } from '../../types/clamped';
 import { Tile, createTile } from '../../entities/tile';
 import { Viewport } from '../../viewport';
 

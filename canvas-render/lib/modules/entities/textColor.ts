@@ -3,7 +3,7 @@ import { Drawable, dispatchDraw } from '../components/drawable';
 import { Text } from '../components/text';
 import { Entity, Draw } from './entity';
 
-export type RText = Entity & {
+export type TextColor = Entity & {
     abilities: {
         text: Text;
         color: Color;
@@ -11,20 +11,20 @@ export type RText = Entity & {
     };
 };
 
-export const isRText = (entity: Entity): entity is RText => {
-    return entity.type === 'RText';
+export const isTextColor = (entity: Entity): entity is TextColor => {
+    return entity.type === 'TextColor';
 };
 
-export const drawRText: Draw<RText> = (
+export const drawTextColor: Draw<TextColor> = (
     canvas: HTMLCanvasElement,
-    text: RText
+    text: TextColor
 ): void => {
     const ctx = canvas.getContext('2d')!;
 
     const x = text.pos.x,
         y = text.pos.y;
 
-    const { fontSize, font, text: str } = text.abilities.text;
+    const { fontSize, font, content: str } = text.abilities.text;
     const color = text.abilities.color;
 
     ctx.font = `${fontSize}px ${font}`;
@@ -34,14 +34,14 @@ export const drawRText: Draw<RText> = (
     ctx.fillText(str, x, y);
 };
 
-export const createRText = (
+export const createTextColor = (
     pos: { x: number; y: number },
     text: Text,
     color: Color
-): RText => {
+): TextColor => {
     return {
         pos,
-        type: 'RText',
+        type: 'TextColor',
         abilities: {
             text,
             color,

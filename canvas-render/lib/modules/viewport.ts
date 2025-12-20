@@ -1,10 +1,10 @@
 import { COLORS } from '../constants';
-import { Clamped } from './clamped';
+import { Clamped } from './types/clamped';
 import { isDrawable } from './components/drawable';
-import { RText } from './entities/rText';
+import { TextColor } from './entities/textColor';
 import { Tile } from './entities/tile';
 
-export type RenderableEntity = Tile | RText;
+export type RenderableEntity = Tile | TextColor;
 
 export interface Viewport {
     width: Clamped;

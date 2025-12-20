@@ -1,6 +1,6 @@
 import type { Entity } from '../entities/entity';
-import { drawRText } from '../entities/rText';
-import { isRText } from '../entities/rText';
+import { drawTextColor } from '../entities/textColor';
+import { isTextColor } from '../entities/textColor';
 import { drawTile } from '../entities/tile';
 import { isTile } from '../entities/tile';
 
@@ -18,8 +18,8 @@ export const dispatchDraw = (
     canvas: HTMLCanvasElement,
     entity: Entity
 ): void => {
-    if (isRText(entity)) {
-        drawRText(canvas, entity);
+    if (isTextColor(entity)) {
+        drawTextColor(canvas, entity);
     } else if (isTile(entity)) {
         drawTile(canvas, entity);
     }

@@ -3,7 +3,7 @@ import type { Entity } from '../entities/entity';
 export interface Text {
     fontSize: number;
     font: string;
-    text: string;
+    content: string;
 }
 
 export const isText = (
