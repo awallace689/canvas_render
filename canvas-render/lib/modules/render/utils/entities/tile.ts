@@ -1,12 +1,14 @@
-import { CANVAS_CONFIG } from '../../../../constants';
+import { getCanvasConfig } from '../../../../canvas';
+import { CanvasId } from '../../../../constants';
 import { midpoint } from '../../../../math';
-import type { CharColor } from '../../../types/charColor';
 import { Box } from '../../../components/box';
 import { Entity } from '../../../entities/entity';
 import { TextColor, createTextColor } from '../../../entities/textColor';
+import type { CharColor } from '../../../types/charColor';
 import { Clamped } from '../../../types/clamped';
 
 export const fitChar = (
+    canvasId: CanvasId,
     char: CharColor,
     sizedEntity: Entity & { abilities: { box: Box } },
     offset?: { x: Clamped; y: Clamped }
@@ -24,7 +26,7 @@ export const fitChar = (
         pos,
         {
             fontSize,
-            font: CANVAS_CONFIG.font,
+            font: getCanvasConfig(canvasId).font,
             content: char.char,
         },
         char.color

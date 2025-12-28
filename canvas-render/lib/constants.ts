@@ -1,18 +1,31 @@
-export const CANVAS_ID = '__canvas_render__canvas';
+import { Clamped } from './modules/types/clamped';
+import { v4 as randomUUID } from 'uuid';
 
-export const COLORS = Object.freeze({
-    brown: '#964B00',
-    white: 'white',
-    black: 'black',
-    red: 'red',
-    green: 'green',
-});
+export type CanvasId = string & { __brand: 'canvas id' };
 
-export const CANVAS_CONFIG = Object.freeze({
-    width: 800,
-    height: 800,
-    /** CSS color */
-    backgroundColor: COLORS.green,
-    viewports: [{ x: 400, y: 400, entities: [] }],
-    font: 'serif',
-});
+export const createCanvasId = (): CanvasId =>
+    `__canvas_${randomUUID()}` as CanvasId;
+
+export enum Color {
+    brown = '#964B00',
+    white = 'white',
+    black = 'black',
+    red = 'red',
+    green = 'green',
+    blue = 'blue',
+}
+
+export type CanvasConfig = Readonly<{
+    width: Clamped;
+    height: Clamped;
+    backgroundColor: Color;
+    font: 'serif' | 'sans-serif' | string;
+    keyEvents: boolean;
+}>;
+
+export const createCanvasConfig = (options: {
+    -readonly [P in keyof CanvasConfig]: CanvasConfig[P];
+}): CanvasConfig =>
+    Object.freeze({
+        ...options,
+    });

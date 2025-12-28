@@ -1,62 +1,112 @@
-import { CANVAS_CONFIG, CANVAS_ID } from './constants';
+import { CanvasConfig, CanvasId, createCanvasId } from './constants';
+import { initializeKeyEvents } from './modules/events/events';
 import { Frame } from './modules/frame';
-import { render } from './modules/viewport';
+import { renderViewport } from './modules/viewport';
 
-const createCanvas = (): HTMLCanvasElement => {
-    const canvas = document.createElement('canvas');
-    canvas.id = CANVAS_ID;
+const canvasConfigMap = new Map<CanvasId, CanvasConfig>();
+export const getCanvasConfig = (canvasId: CanvasId): CanvasConfig => {
+    const config = canvasConfigMap.get(canvasId);
+    if (!config) {
+        throw new Error(`No canvas config found for canvasId: ${canvasId}`);
+    }
 
-    canvas.width = CANVAS_CONFIG.width;
-    canvas.height = CANVAS_CONFIG.height;
+    return config;
+};
 
-    canvas.style.backgroundColor = CANVAS_CONFIG.backgroundColor;
+export const setCanvasConfig = (
+    canvasId: CanvasId,
+    config: CanvasConfig
+): void => {
+    canvasConfigMap.set(canvasId, config);
+};
+
+const canvasMap = new Map<CanvasId, HTMLCanvasElement>();
+export const getCanvas = (canvasId: CanvasId): HTMLCanvasElement => {
+    const canvas = canvasMap.get(canvasId);
+    if (!canvas) {
+        throw new Error(`No canvas found for canvasId: ${canvasId}`);
+    }
 
     return canvas;
 };
 
-const renderCanvas = (frame: Frame, canvas: HTMLCanvasElement) => {
-    clear(canvas);
+export const setCanvas = (
+    canvasId: CanvasId,
+    canvas: HTMLCanvasElement
+): void => {
+    canvasMap.set(canvasId, canvas);
+};
+
+const createCanvas = (
+    config: CanvasConfig
+): { canvasId: CanvasId; canvas: HTMLCanvasElement } => {
+    const canvas = document.createElement('canvas');
+    const canvasId = createCanvasId();
+
+    canvas.id = canvasId;
+    canvas.tabIndex = 0;
+
+    setCanvasConfig(canvasId, config);
+
+    if (config.keyEvents) {
+        initializeKeyEvents(canvas, canvasId);
+    }
+
+    canvas.width = config.width;
+    canvas.height = config.height;
+
+    canvas.style.backgroundColor = config.backgroundColor;
+
+    return { canvasId, canvas };
+};
+
+export const renderCanvas = (frame: Frame, canvasId: CanvasId) => {
+    clear(canvasId);
+
     for (const viewport of frame.viewports) {
-        render(viewport, canvas);
+        renderViewport(viewport, canvasId);
     }
 };
 
-const clear = (canvas: HTMLCanvasElement) => {
+const clear = (canvasId: CanvasId) => {
+    const canvas = getCanvas(canvasId);
     const ctx = canvas.getContext('2d');
     if (!ctx) {
         throw new Error('Could not get 2D context from canvas');
     }
 
-    ctx.fillStyle = CANVAS_CONFIG.backgroundColor;
+    ctx.fillStyle = getCanvasConfig(canvasId).backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 };
 
-const findCanvas = () => {
-    return document.querySelector(`#${CANVAS_ID}`);
+const findCanvas = (canvasId: CanvasId) => {
+    return document.querySelector(`#${canvasId}`);
 };
 
-export const attach = (id: string, frame: Frame): string => {
-    const existingCanvas = findCanvas();
-    if (existingCanvas) {
-        console.warn('Attach called while canvas already attached. Aborting.');
-        return CANVAS_ID;
-    }
-
-    const parent = document.querySelector(`#${id}`);
+export const attach = (
+    containerId: string,
+    config: CanvasConfig,
+    frame?: Frame
+): CanvasId => {
+    const parent = document.querySelector(`#${containerId}`);
     if (!parent) {
-        throw new Error(`Could not find element with id: ${id}`);
+        throw new Error(`Could not find element with id: ${containerId}`);
     }
 
-    const canvas = createCanvas();
+    const { canvasId, canvas } = createCanvas(config);
     parent.appendChild(canvas);
 
-    if (!findCanvas()) {
-        throw new Error(`Failed to attach element with id: ${id}`);
+    if (!findCanvas(canvasId)) {
+        throw new Error(`Failed to attach element with id: ${containerId}`);
     }
 
-    renderCanvas(frame, canvas);
+    setCanvas(canvasId, canvas);
 
-    return canvas.id;
+    if (frame) {
+        renderCanvas(frame, canvasId);
+    }
+
+    return canvasId;
 };
 
 export const detach = (id: string): boolean => {

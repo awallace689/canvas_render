@@ -1,3 +1,4 @@
+import { drawCircle, isCircle } from '../entities/circle';
 import type { Entity } from '../entities/entity';
 import { drawTextColor } from '../entities/textColor';
 import { isTextColor } from '../entities/textColor';
@@ -22,5 +23,7 @@ export const dispatchDraw = (
         drawTextColor(canvas, entity);
     } else if (isTile(entity)) {
         drawTile(canvas, entity);
+    } else if (isCircle(entity)) {
+        drawCircle(canvas, entity);
     }
 };

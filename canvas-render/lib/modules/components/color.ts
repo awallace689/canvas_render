@@ -1,4 +1,4 @@
-import type { Color } from '../../types';
+import { Color } from '../../constants';
 import type { Entity } from '../entities/entity';
 
 export const isColor = (

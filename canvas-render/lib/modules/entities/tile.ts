@@ -1,4 +1,4 @@
-import { Color } from '../../types';
+import { Color } from '../../constants';
 import { Box } from '../components/box';
 import { Drawable, dispatchDraw } from '../components/drawable';
 import { Entity } from './entity';

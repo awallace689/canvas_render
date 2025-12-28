@@ -3,17 +3,17 @@ import {
     pushViewport,
     popViewport,
 } from '../../lib/modules/frame';
-import { clampDown } from '../../lib/modules/types/clamped';
+import { clamp } from '../../lib/modules/types/clamped';
 import { Viewport } from '../../lib/modules/viewport';
 import { expect, describe, test } from 'vitest';
 
 const createMockViewport = (
     description: string = 'Mock Viewport'
 ): Viewport => ({
-    width: clampDown(100),
-    height: clampDown(100),
-    x: clampDown(0),
-    y: clampDown(0),
+    width: clamp(100),
+    height: clamp(100),
+    x: clamp(0),
+    y: clamp(0),
     entities: [],
     description,
 });

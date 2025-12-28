@@ -1,6 +1,6 @@
-export type Clamped = number & { __brand: 'Clamped number' };
+export type Clamped = number & { __brand: 'clamped' };
 
-export const clampDown = (decimal: number): Clamped => {
+export const clamp = (decimal: number): Clamped => {
     return Math.floor(decimal) as Clamped;
 };
 
@@ -17,7 +17,7 @@ export const clampDown2D = (pos: {
     y: number;
 }): { x: Clamped; y: Clamped } => {
     const { x, y } = pos;
-    return { x: clampDown(x), y: clampDown(y) };
+    return { x: clamp(x), y: clamp(y) };
 };
 
 export const clampAdd = (...params: Clamped[]): Clamped =>

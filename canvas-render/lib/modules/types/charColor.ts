@@ -1,5 +1,5 @@
 import { TypeAssertError } from '../../errors';
-import type { Color } from '../../types';
+import { Color } from '../../constants';
 import type { Char } from './char';
 import { isChar } from './char';
 

@@ -26,5 +26,6 @@
         "noImplicitAny": true,
         "outDir": "dist"
     },
-    "include": ["lib/**/*.ts", "./index.ts"]
+    "include": ["lib/**/*.ts", "examples/**/*.ts", "./index.ts"],
+    "exclude": ["node_modules", "dist"]
 }

@@ -1,4 +1,4 @@
-import { Color } from '../../types';
+import type { Color } from '../../constants';
 import { Box } from '../components/box';
 import { Drawable } from '../components/drawable';
 import { Text } from '../components/text';
@@ -10,6 +10,7 @@ export interface Entity {
     type: string;
     abilities: Partial<{
         box?: Box;
+        radius?: number;
         color?: Color;
         text?: Text;
         drawable?: Drawable;

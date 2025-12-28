@@ -94,8 +94,7 @@
         </div>
         <script type="module">
             window.onload = async function () {
-                const path = './examples/tile/tile.ts';
-                const example = await import(path);
+                const example = await import('./examples/movement/main.ts');
                 if (example) {
                     example.run('container');
                 } else {
