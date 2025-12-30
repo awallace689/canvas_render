@@ -21,8 +21,8 @@ export const drawTextColor: Draw<TextColor> = (
 ): void => {
     const ctx = canvas.getContext('2d')!;
 
-    const x = text.pos.x,
-        y = text.pos.y;
+    const x = text.pos.x;
+    const y = text.pos.y;
 
     const { fontSize, font, content: str } = text.abilities.text;
     const color = text.abilities.color;
@@ -42,6 +42,7 @@ export const createTextColor = (
     return {
         pos,
         type: 'TextColor',
+        isDeleted: false,
         abilities: {
             text,
             color,

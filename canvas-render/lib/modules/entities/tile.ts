@@ -36,6 +36,7 @@ export const createTile = (
     return {
         pos,
         type: 'Tile',
+        isDeleted: false,
         abilities: {
             box,
             color,

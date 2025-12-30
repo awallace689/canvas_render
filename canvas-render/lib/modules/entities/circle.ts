@@ -40,6 +40,7 @@ export const createCircle = (
     return {
         pos,
         type: 'Circle',
+        isDeleted: false,
         abilities: {
             radius,
             color,

@@ -1,5 +1,6 @@
 import { Timestamp } from '../../../examples/movement/main';
 import { CanvasId } from '../../constants';
+import { Entity } from '../entities/entity';
 
 type KeyCode = string;
 type KeyEvent = (keyboardEvent: KeyboardEvent, delta: Timestamp) => void;
@@ -11,9 +12,13 @@ type KeyEventsByCategory = Readonly<
 >;
 type KeyEventsByCategoryByCanvasId = Map<CanvasId, KeyEventsByCategory>;
 type UnregisterKeyEvent = () => void;
+export type EventsConfig = {
+    unregister: () => void;
+};
 
 const KEY_EVENTS_BY_CATEGORY_BY_CANVAS_ID: KeyEventsByCategoryByCanvasId =
     new Map();
+
 const HELD_KEYS_BY_CANVAS = new Map<CanvasId, Set<KeyCode>>();
 
 const createKeyEventsByCategory = (): KeyEventsByCategory => {
@@ -39,11 +44,16 @@ const getKeyEventsByKeyCodeByCategory = (
 };
 
 export const registerKeyEvent = (
+    entity: Entity,
     canvasId: CanvasId,
     category: KeyEventCategory,
     keyCode: string,
     handler: KeyEvent
 ): UnregisterKeyEvent => {
+    if (isEntityWithEvents(entity)) {
+        entity.events.unregister();
+    }
+
     const keyEventsByKeyCode = getKeyEventsByKeyCodeByCategory(
         canvasId,
         category
@@ -106,4 +116,10 @@ const initializeKeyEventsByCategoryForCanvas = (canvasId: CanvasId) => {
         canvasId,
         createKeyEventsByCategory()
     );
+};
+
+const isEntityWithEvents = (
+    entity: Entity
+): entity is Entity & { events: EventsConfig } => {
+    return entity.events !== undefined;
 };

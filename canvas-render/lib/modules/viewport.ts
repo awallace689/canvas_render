@@ -11,6 +11,7 @@ export interface Viewport {
     y: Clamped;
     entities: Entity[];
     description: string;
+    isDeleted: boolean;
 }
 
 export const renderViewport = (viewport: Viewport, canvasId: CanvasId) => {
@@ -33,6 +34,7 @@ export const createViewport = (options: {
     description: string;
 }): Viewport => {
     return {
+        isDeleted: false,
         ...options,
     };
 };

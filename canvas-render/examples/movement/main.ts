@@ -8,19 +8,19 @@ import { createViewport } from '../../lib/modules/viewport';
 
 export type Timestamp = number & { __brand: 'timestamp' };
 
-const canvasTimestamps = new Map<CanvasId, Timestamp>();
+const prevTimestampByCanvasId = new Map<CanvasId, Timestamp>();
 
 export const createTimestamp = (
     canvasId: CanvasId,
     timestamp: number
 ): Timestamp => {
     const timestampBranded = timestamp as Timestamp;
-    canvasTimestamps.set(canvasId, timestampBranded);
+    prevTimestampByCanvasId.set(canvasId, timestampBranded);
 
     return timestampBranded;
 };
 export const getPrevTimestamp = (canvasid: CanvasId): Timestamp | undefined =>
-    canvasTimestamps.get(canvasid) as Timestamp;
+    prevTimestampByCanvasId.get(canvasid) as Timestamp;
 
 export type TimeDelta = number & { __brand: 'time delta' };
 
