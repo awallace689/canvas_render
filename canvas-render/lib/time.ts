@@ -23,3 +23,6 @@ export type TimeDeltaMultiplier = keyof typeof TIME_DELTA_MULTIPLIER;
 export const TIME_DELTA_MULTIPLIER = {
     NONE: 1,
 } as const;
+
+export const getTimeDelta = (t1: Timestamp, t0: Timestamp): TimeDelta =>
+    (t1 - t0) as TimeDelta;
