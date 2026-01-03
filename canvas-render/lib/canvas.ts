@@ -1,5 +1,5 @@
 import { CanvasConfig, CanvasId, createCanvasId } from './constants';
-import { initializeKeyEvents } from './modules/events/events';
+import { initializeKeyEventHandlers } from './modules/events/events';
 import { Frame } from './modules/frame';
 import { renderViewport } from './modules/viewport';
 
@@ -49,7 +49,7 @@ const createCanvas = (
     setCanvasConfig(canvasId, config);
 
     if (config.keyEvents) {
-        initializeKeyEvents(canvas, canvasId);
+        initializeKeyEventHandlers(canvas, canvasId);
     }
 
     canvas.width = config.width;

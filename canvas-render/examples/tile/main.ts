@@ -6,19 +6,19 @@ import { fitChar } from '../../lib/modules/render/utils/entities/tile';
 import { tile } from '../../lib/modules/render/utils/viewport';
 import { createCharColor } from '../../lib/modules/types/charColor';
 import { clamp } from '../../lib/modules/types/clamped';
-import { Viewport } from '../../lib/modules/viewport';
+import { createViewport, Viewport } from '../../lib/modules/viewport';
 
 export const buildFrame = (canvasId: CanvasId): Frame => {
     const config = getCanvasConfig(canvasId);
     const margin = 100;
-    const viewport: Viewport = {
+    const viewport: Viewport = createViewport({
         width: clamp(config.width - 2 * margin),
         height: clamp(config.width - 2 * margin),
         x: clamp(100),
         y: clamp(100),
         entities: [],
         description: 'Frame',
-    };
+    });
     const tiles = tile(viewport, {
         countX: clamp(8),
         countY: clamp(8),
