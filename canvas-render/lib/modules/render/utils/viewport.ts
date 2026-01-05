@@ -1,5 +1,5 @@
-import { Color } from '../../../constants';
-import { Tile, createTile } from '../../entities/tile';
+import { CanvasId, Color } from '../../../constants';
+import { createTile, Tile } from '../../entities/tile';
 import { clamp, clampUp, Clamped, clampAdd } from '../../types/clamped';
 import { Viewport } from '../../viewport';
 
@@ -10,7 +10,8 @@ export const tile = (
         countY: Clamped;
         colors: [Color, Color];
         stagger?: boolean;
-    }
+    },
+    canvasId: CanvasId
 ): Tile[] => {
     const { countX, countY, colors, stagger } = options;
 
@@ -25,9 +26,12 @@ export const tile = (
     while (yPos + height <= viewport.y + viewport.height) {
         while (xPos + width <= viewport.x + viewport.width) {
             const tile = createTile(
-                { x: clamp(xPos), y: clamp(yPos) },
-                { width: clampUp(width), height: clampUp(height) },
-                color
+                {
+                    pos: { x: clamp(xPos), y: clamp(yPos) },
+                    box: { width: clampUp(width), height: clampUp(height) },
+                    color,
+                },
+                canvasId
             );
 
             tiles.push(tile);

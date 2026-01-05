@@ -19,12 +19,16 @@ export const buildFrame = (canvasId: CanvasId): Frame => {
         entities: [],
         description: 'Frame',
     });
-    const tiles = tile(viewport, {
-        countX: clamp(8),
-        countY: clamp(8),
-        colors: [Color.white, Color.black],
-        stagger: true,
-    });
+    const tiles = tile(
+        viewport,
+        {
+            countX: clamp(8),
+            countY: clamp(8),
+            colors: [Color.white, Color.black],
+            stagger: true,
+        },
+        canvasId
+    );
 
     const chars: TextColor[] = tiles.map((tile) =>
         fitChar(canvasId, createCharColor('P', Color.brown), tile)
@@ -44,6 +48,7 @@ export const run = (containerId: string): void => {
             backgroundColor: Color.green,
             font: 'serif',
             keyEvents: false,
+            customEvents: false,
         })
     );
 

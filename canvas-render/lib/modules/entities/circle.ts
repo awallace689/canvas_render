@@ -1,6 +1,6 @@
-import { Color } from '../../constants';
+import { CanvasId, Color } from '../../constants';
 import { Drawable, dispatchDraw } from '../components/drawable';
-import { Entity, Draw } from './entity';
+import { Entity, Draw, createEntityId, setEntityById } from './entity';
 
 export type Circle = Entity & {
     abilities: {
@@ -33,11 +33,16 @@ export const drawCircle: Draw<Circle> = (
 };
 
 export const createCircle = (
-    pos: { x: number; y: number },
-    radius: number,
-    color: Color
+    config: {
+        pos: { x: number; y: number };
+        radius: number;
+        color: Color;
+    },
+    canvasId: CanvasId
 ): Circle => {
-    return {
+    const { pos, radius, color } = config;
+    const circle = {
+        id: createEntityId(),
         pos,
         type: 'Circle',
         isDeleted: false,
@@ -47,4 +52,8 @@ export const createCircle = (
             drawable: { draw: dispatchDraw },
         },
     };
+
+    setEntityById(circle, canvasId);
+
+    return circle;
 };

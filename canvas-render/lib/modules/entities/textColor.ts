@@ -1,7 +1,7 @@
-import { Color } from '../../constants';
+import { CanvasId, Color } from '../../constants';
 import { Drawable, dispatchDraw } from '../components/drawable';
 import { Text } from '../components/text';
-import { Entity, Draw } from './entity';
+import { Entity, Draw, createEntityId, setEntityById } from './entity';
 
 export type TextColor = Entity & {
     abilities: {
@@ -35,11 +35,12 @@ export const drawTextColor: Draw<TextColor> = (
 };
 
 export const createTextColor = (
-    pos: { x: number; y: number },
-    text: Text,
-    color: Color
+    config: { pos: { x: number; y: number }; text: Text; color: Color },
+    canvasId: CanvasId
 ): TextColor => {
-    return {
+    const { pos, text, color } = config;
+    const textColor = {
+        id: createEntityId(),
         pos,
         type: 'TextColor',
         isDeleted: false,
@@ -49,4 +50,8 @@ export const createTextColor = (
             drawable: { draw: dispatchDraw },
         },
     };
+
+    setEntityById(textColor, canvasId);
+
+    return textColor;
 };

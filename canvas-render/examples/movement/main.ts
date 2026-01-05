@@ -21,6 +21,7 @@ export const run = (containerId: string): void => {
             backgroundColor: Color.blue,
             font: 'serif',
             keyEvents: true,
+            customEvents: false,
         })
     );
     const config = getCanvasConfig(canvasId);
@@ -34,7 +35,12 @@ export const run = (containerId: string): void => {
         x: clamp(0),
         y: clamp(0),
         description: 'Viewport 1',
-        entities: [createCircle(canvasMidpoint, clamp(50), Color.red)],
+        entities: [
+            createCircle(
+                { pos: canvasMidpoint, radius: clamp(50), color: Color.red },
+                canvasId
+            ),
+        ],
     });
 
     const frame = createFrame([viewport]);

@@ -23,12 +23,15 @@ export const fitChar = (
     const pos = { x: mid.x + (offset?.x ?? 0), y: mid.y + (offset?.y ?? 0) };
 
     return createTextColor(
-        pos,
         {
-            fontSize,
-            font: getCanvasConfig(canvasId).font,
-            content: char.char,
+            pos,
+            text: {
+                fontSize,
+                font: getCanvasConfig(canvasId).font,
+                content: char.char,
+            },
+            color: char.color,
         },
-        char.color
+        canvasId
     );
 };

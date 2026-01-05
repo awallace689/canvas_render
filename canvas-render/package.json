@@ -30,7 +30,6 @@
         "vitest": "^2.1.5"
     },
     "dependencies": {
-        "heapify": "^0.6.0",
         "uuid": "^13.0.0"
     }
 }

@@ -1,7 +1,7 @@
-import { Color } from '../../constants';
+import { CanvasId, Color } from '../../constants';
 import { Box } from '../components/box';
 import { Drawable, dispatchDraw } from '../components/drawable';
-import { Entity } from './entity';
+import { createEntityId, Entity, setEntityById } from './entity';
 
 export type Tile = Entity & {
     abilities: {
@@ -29,11 +29,16 @@ export const drawTile = (canvas: HTMLCanvasElement, tile: Tile): void => {
 };
 
 export const createTile = (
-    pos: { x: number; y: number },
-    box: Box,
-    color: Color
+    config: {
+        pos: { x: number; y: number };
+        box: Box;
+        color: Color;
+    },
+    canvasId: CanvasId
 ): Tile => {
-    return {
+    const { pos, box, color } = config;
+    const tile = {
+        id: createEntityId(),
         pos,
         type: 'Tile',
         isDeleted: false,
@@ -43,4 +48,8 @@ export const createTile = (
             drawable: { draw: dispatchDraw },
         },
     };
+
+    setEntityById(tile, canvasId);
+
+    return tile;
 };

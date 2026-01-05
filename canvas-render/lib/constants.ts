@@ -20,6 +20,7 @@ export type CanvasConfig = Readonly<{
     height: Clamped;
     backgroundColor: Color;
     font: 'serif' | 'sans-serif' | string;
+    customEvents: boolean;
     keyEvents: boolean;
 }>;
 
