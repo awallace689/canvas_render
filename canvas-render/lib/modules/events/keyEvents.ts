@@ -1,25 +1,26 @@
 import { CanvasId } from '../../constants';
-import { Timestamp } from '../../time';
-import { Entity } from '../entities/entity';
+import { TimeDelta } from '../../time';
 import { Event } from '../events/events';
+
+export type CanvasKeyboardEvent = {
+    code: string;
+};
 
 export type KeyEvent = Event & {
     eventType: KeyEventType;
-    keyboardEvent: KeyboardEvent;
+    keyboardEvent: CanvasKeyboardEvent;
 };
 
 type KeyEventHandler = (
-    keyboardEvent: KeyboardEvent,
-    delta: Timestamp,
-    entity: Entity
+    keyboardEvent: CanvasKeyboardEvent,
+    delta: TimeDelta
 ) => void;
 
-export const REALTIME_KEY_EVENTS_BY_CANVAS_ID: Map<CanvasId, KeyEvent[]> =
-    new Map();
+const REALTIME_KEY_EVENTS_BY_CANVAS_ID: Map<CanvasId, KeyEvent[]> = new Map();
 
 type KeyCode = string;
 
-type KeyEventHandlers = Set<KeyEventHandler>;
+type KeyEventHandlers = KeyEventHandler[];
 
 type KeyEventHandlersByKeyCode = Map<KeyCode, KeyEventHandlers>;
 
@@ -29,13 +30,54 @@ type KeyEventHandlersByType = Readonly<
 
 type KeyEventHandlersByTypeByCanvasId = Map<CanvasId, KeyEventHandlersByType>;
 
-export type RealtimeKeyEvent = 'keyup' | 'keydown';
-export type KeyEventType = RealtimeKeyEvent | 'held';
+const REALTIME_KEY_EVENTS = ['keyup', 'keydown'] as const;
+const KEY_EVENTS = ['held', ...REALTIME_KEY_EVENTS] as const;
+
+export type RealtimeKeyEvent = (typeof REALTIME_KEY_EVENTS)[number];
+export type KeyEventType = (typeof KEY_EVENTS)[number];
 
 type UnregisterKeyEvent = () => void;
 
 export type EventsConfig = {
     unregister: () => void;
+};
+
+export const isKeyEvent = (event: Event): event is KeyEvent =>
+    KEY_EVENTS.includes(event.eventType);
+
+export const isRealtimeKeyEvent = (
+    event: Event
+): event is KeyEvent & { eventType: RealtimeKeyEvent } =>
+    REALTIME_KEY_EVENTS.some((rtKeyEvent) => rtKeyEvent === event.eventType);
+
+export const handleKeyEvent = (
+    event: KeyEvent,
+    delta: TimeDelta,
+    canvasId: CanvasId
+): void => {
+    const keyEventHandlersByKeyCode = getKeyEventHandlersByKeyCodeByType(
+        canvasId,
+        event.eventType
+    );
+
+    let handlers: KeyEventHandlers | undefined;
+    try {
+        handlers = keyEventHandlersByKeyCode.get(event.keyboardEvent.code);
+    } catch (error) {
+        console.debug(
+            'Error getting key event handlers for event:',
+            event,
+            error
+        );
+    }
+
+    if (!handlers) {
+        return;
+    }
+
+    for (const handler of handlers) {
+        handler(event.keyboardEvent, delta);
+    }
 };
 
 const KEY_EVENTS_BY_CATEGORY_BY_CANVAS_ID: KeyEventHandlersByTypeByCanvasId =
@@ -66,7 +108,6 @@ const getKeyEventHandlersByKeyCodeByType = (
 };
 
 export const registerKeyEventHandler = (
-    entity: Entity,
     canvasId: CanvasId,
     options: {
         category: KeyEventType;
@@ -83,14 +124,15 @@ export const registerKeyEventHandler = (
     let keyEventHandlers: KeyEventHandlers | undefined =
         keyEventHandlersByKeyCode.get(keyCode);
     if (!keyEventHandlers) {
-        keyEventHandlers = new Set([handler]);
+        keyEventHandlers = [handler];
         keyEventHandlersByKeyCode.set(keyCode, keyEventHandlers);
     } else {
-        keyEventHandlers.add(handler);
+        keyEventHandlers.push(handler);
     }
 
     return () => {
-        keyEventHandlers.delete(handler);
+        const index = keyEventHandlers.findIndex((h) => h === handler);
+        keyEventHandlers.splice(index, 1);
     };
 };
 
@@ -99,6 +141,7 @@ export const initializeKeyEventHandlersByCanvasId = (
     canvasId: CanvasId
 ): void => {
     initializeKeyEventHandlersByTypeForCanvas(canvasId);
+    initializeHeldKeysByCanvasId(canvasId);
 
     addEventListeners(canvas, canvasId);
 };
@@ -109,11 +152,7 @@ const addEventListeners = (canvas: HTMLCanvasElement, canvasId: CanvasId) => {
     const realtimeKeyEvents = getRealtimeKeyEventsByCanvasId(canvasId);
 
     canvas.addEventListener(keyDown, (event) => {
-        let heldKeys = getHeldKeysByCanvasId(canvasId);
-        if (!heldKeys) {
-            heldKeys = new Set<KeyCode>();
-            HELD_KEYS_BY_CANVAS_ID.set(canvasId, heldKeys);
-        }
+        const heldKeys = getHeldKeysByCanvasId(canvasId);
 
         realtimeKeyEvents.push({
             eventType: keyDown,
@@ -142,6 +181,16 @@ const addEventListeners = (canvas: HTMLCanvasElement, canvasId: CanvasId) => {
             );
         }
     });
+};
+
+const initializeHeldKeysByCanvasId = (canvasId: CanvasId) => {
+    if (HELD_KEYS_BY_CANVAS_ID.has(canvasId)) {
+        throw new Error(
+            `Held keys already initialized for canvasId: ${canvasId}`
+        );
+    }
+
+    HELD_KEYS_BY_CANVAS_ID.set(canvasId, new Set());
 };
 
 const initializeKeyEventHandlersByTypeForCanvas = (canvasId: CanvasId) => {

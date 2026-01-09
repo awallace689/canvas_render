@@ -1,6 +1,13 @@
+import { getCanvasConfig } from '../../canvas';
 import { CanvasId } from '../../constants';
+import { TimeDelta } from '../../time';
 import { Entity } from '../entities/entity';
-import { getRealtimeKeyEventsByCanvasId, KeyEventType } from './keyEvents';
+import {
+    getRealtimeKeyEventsByCanvasId,
+    handleKeyEvent,
+    isKeyEvent,
+    KeyEventType,
+} from './keyEvents';
 
 export type Event = {
     eventType: EventType;
@@ -17,12 +24,30 @@ export type EventIndex = Map<EventType, Set<Entity>>;
 
 const EVENTS_BY_CANVAS_ID: Map<CanvasId, IsSortedEvents> = new Map();
 
-const handleEvents = (canvasId: CanvasId): void => {
+const raiseRealtimeKeyEvents = (canvasId: CanvasId): void => {
     const realtimeKeyEvents = getRealtimeKeyEventsByCanvasId(canvasId);
     const numRealtimeEvents = realtimeKeyEvents.length;
 
-    raiseEvents(realtimeKeyEvents.slice(0, numRealtimeEvents), canvasId);
-    realtimeKeyEvents.splice(0, numRealtimeEvents);
+    raiseEvents(realtimeKeyEvents.splice(0, numRealtimeEvents), canvasId);
+};
+
+export const handleEvents = (delta: TimeDelta, canvasId: CanvasId): void => {
+    const config = getCanvasConfig(canvasId);
+    if (config.keyEvents) {
+        raiseRealtimeKeyEvents(canvasId);
+    }
+
+    const events = getSortedEventsByCanvasId(canvasId);
+    console.debug('events sorted', events);
+    for (const event of events) {
+        if (isKeyEvent(event)) {
+            handleKeyEvent(event, delta, canvasId);
+        }
+    }
+};
+
+export const clearEvents = (canvasId: CanvasId): void => {
+    EVENTS_BY_CANVAS_ID.set(canvasId, { isSorted: true, events: [] });
 };
 
 export const initializeEventsByCanvasId = (canvasId: CanvasId) => {

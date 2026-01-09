@@ -2,6 +2,17 @@ import { attach, getCanvasConfig, renderCanvas } from '../../lib/canvas';
 import { CanvasId, Color, createCanvasConfig } from '../../lib/constants';
 import { midpoint } from '../../lib/math';
 import { createCircle } from '../../lib/modules/entities/circle';
+import {
+    clearEvents,
+    handleEvents,
+    raiseEvents,
+} from '../../lib/modules/events/events';
+import {
+    getHeldKeysByCanvasId,
+    getRealtimeKeyEventsByCanvasId,
+    KeyEvent,
+    registerKeyEventHandler,
+} from '../../lib/modules/events/keyEvents';
 import { createFrame, Frame } from '../../lib/modules/frame';
 import { clamp } from '../../lib/modules/types/clamped';
 import { createViewport } from '../../lib/modules/viewport';
@@ -25,26 +36,66 @@ export const run = (containerId: string): void => {
         })
     );
     const config = getCanvasConfig(canvasId);
-    const canvasMidpoint = midpoint(
-        { x: 0, y: 0 },
-        { x: config.width, y: config.height }
-    );
     const viewport = createViewport({
         width: clamp(config.width),
         height: clamp(config.height),
         x: clamp(0),
         y: clamp(0),
         description: 'Viewport 1',
-        entities: [
-            createCircle(
-                { pos: canvasMidpoint, radius: clamp(50), color: Color.red },
-                canvasId
-            ),
-        ],
+        entities: [createPlayer(canvasId)],
     });
 
     const frame = createFrame([viewport]);
     requestAnimationFrame(loop(canvasId, frame));
+};
+
+const MOVEMENT_MULTIPLER = 1;
+
+const createPlayer = (canvasId: CanvasId) => {
+    const config = getCanvasConfig(canvasId);
+    const canvasMidpoint = midpoint(
+        { x: 0, y: 0 },
+        { x: config.width, y: config.height }
+    );
+
+    const circle = createCircle(
+        { pos: canvasMidpoint, radius: clamp(50), color: Color.red },
+        canvasId
+    );
+
+    registerKeyEventHandler(canvasId, {
+        category: 'held',
+        keyCode: 'KeyW',
+        handler: (_, delta) => {
+            circle.pos.y -= MOVEMENT_MULTIPLER * delta;
+        },
+    });
+
+    registerKeyEventHandler(canvasId, {
+        category: 'held',
+        keyCode: 'KeyS',
+        handler: (_, delta) => {
+            circle.pos.y += MOVEMENT_MULTIPLER * delta;
+        },
+    });
+
+    registerKeyEventHandler(canvasId, {
+        category: 'held',
+        keyCode: 'KeyA',
+        handler: (_, delta) => {
+            circle.pos.x -= MOVEMENT_MULTIPLER * delta;
+        },
+    });
+
+    registerKeyEventHandler(canvasId, {
+        category: 'held',
+        keyCode: 'KeyD',
+        handler: (_, delta) => {
+            circle.pos.x += MOVEMENT_MULTIPLER * delta;
+        },
+    });
+
+    return circle;
 };
 
 const loop =
@@ -64,6 +115,24 @@ const loop =
         requestAnimationFrame(loop(canvasId, frame));
     };
 
-const step = (_delta: TimeDelta, canvasId: CanvasId, frame: Frame): void => {
+const step = (delta: TimeDelta, canvasId: CanvasId, frame: Frame): void => {
+    raiseEvents(getRealtimeKeyEventsByCanvasId(canvasId), canvasId);
+    raiseEvents(
+        Array.from(getHeldKeysByCanvasId(canvasId)).map(
+            (keyCode) =>
+                ({
+                    eventType: 'held',
+                    keyboardEvent: { code: keyCode },
+                    priority: -100,
+                }) satisfies KeyEvent
+        ),
+        canvasId
+    );
+
+    console.debug('held keys', getHeldKeysByCanvasId(canvasId));
+
+    handleEvents(delta, canvasId);
+    clearEvents(canvasId);
+
     renderCanvas(frame, canvasId);
 };
