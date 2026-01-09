@@ -2,15 +2,9 @@ import { attach, getCanvasConfig, renderCanvas } from '../../lib/canvas';
 import { CanvasId, Color, createCanvasConfig } from '../../lib/constants';
 import { midpoint } from '../../lib/math';
 import { createCircle } from '../../lib/modules/entities/circle';
-import {
-    clearEvents,
-    handleEvents,
-    raiseEvents,
-} from '../../lib/modules/events/events';
+import { clearEvents, handleEvents } from '../../lib/modules/events/events';
 import {
     getHeldKeysByCanvasId,
-    getRealtimeKeyEventsByCanvasId,
-    KeyEvent,
     registerKeyEventHandler,
 } from '../../lib/modules/events/keyEvents';
 import { createFrame, Frame } from '../../lib/modules/frame';
@@ -116,19 +110,6 @@ const loop =
     };
 
 const step = (delta: TimeDelta, canvasId: CanvasId, frame: Frame): void => {
-    raiseEvents(getRealtimeKeyEventsByCanvasId(canvasId), canvasId);
-    raiseEvents(
-        Array.from(getHeldKeysByCanvasId(canvasId)).map(
-            (keyCode) =>
-                ({
-                    eventType: 'held',
-                    keyboardEvent: { code: keyCode },
-                    priority: -100,
-                }) satisfies KeyEvent
-        ),
-        canvasId
-    );
-
     console.debug('held keys', getHeldKeysByCanvasId(canvasId));
 
     handleEvents(delta, canvasId);

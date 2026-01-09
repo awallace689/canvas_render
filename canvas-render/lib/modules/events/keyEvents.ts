@@ -1,6 +1,6 @@
 import { CanvasId } from '../../constants';
 import { TimeDelta } from '../../time';
-import { Event } from '../events/events';
+import { Event, raiseEvents } from '../events/events';
 
 export type CanvasKeyboardEvent = {
     code: string;
@@ -147,10 +147,9 @@ export const initializeKeyEventHandlersByCanvasId = (
 };
 
 const addEventListeners = (canvas: HTMLCanvasElement, canvasId: CanvasId) => {
-    const keyDown = 'keydown';
-
     const realtimeKeyEvents = getRealtimeKeyEventsByCanvasId(canvasId);
 
+    const keyDown = 'keydown';
     canvas.addEventListener(keyDown, (event) => {
         const heldKeys = getHeldKeysByCanvasId(canvasId);
 
@@ -253,4 +252,20 @@ export const removeHeldKeyByCanvasId = (
             `Tried to remove non-existent held key: ${keyCode} for canvasId: ${canvasId}`
         );
     }
+};
+
+export const raiseHeldKeyEvents = (canvasId: CanvasId) => {
+    raiseEvents(getRealtimeKeyEventsByCanvasId(canvasId), canvasId);
+
+    raiseEvents(
+        Array.from(getHeldKeysByCanvasId(canvasId)).map(
+            (keyCode) =>
+                ({
+                    eventType: 'held',
+                    keyboardEvent: { code: keyCode },
+                    priority: -100,
+                }) satisfies KeyEvent
+        ),
+        canvasId
+    );
 };

@@ -7,6 +7,7 @@ import {
     handleKeyEvent,
     isKeyEvent,
     KeyEventType,
+    raiseHeldKeyEvents,
 } from './keyEvents';
 
 export type Event = {
@@ -35,6 +36,7 @@ export const handleEvents = (delta: TimeDelta, canvasId: CanvasId): void => {
     const config = getCanvasConfig(canvasId);
     if (config.keyEvents) {
         raiseRealtimeKeyEvents(canvasId);
+        raiseHeldKeyEvents(canvasId);
     }
 
     const events = getSortedEventsByCanvasId(canvasId);
